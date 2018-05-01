@@ -83,10 +83,11 @@ def train(**kwargs):
             if (ii + 1) % opt.plot_every == 0:
                 if os.path.exists(opt.debug_file):
                     ipdb.set_trace()
-
                 # plot loss
-                trainer.vis.plot_many(trainer.get_meter_data())
-
+                meter_data = trainer.get_meter_data()
+                for meter in meter_data:
+                    meter_data[meter] = meter_data[meter].cpu().tolist()
+                trainer.vis.plot_many(meter_data)
                 # plot groud truth bboxes
                 ori_img_ = inverse_normalize(at.tonumpy(img[0]))
                 gt_img = visdom_bbox(ori_img_,
@@ -123,7 +124,8 @@ def train(**kwargs):
         trainer.vis.log(log_info)
         if epoch == 13: 
             break
-
+        # import sys
+        # sys.exit(0)
 
 if __name__ == '__main__':
     import fire

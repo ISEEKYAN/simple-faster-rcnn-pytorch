@@ -7,7 +7,11 @@ from pprint import pprint
 
 class Config:
     # data
-    voc_data_dir = '/home/cy/.chainer/dataset/pfnet/chainercv/voc/VOCdevkit/VOC2007/'
+    voc_data_dir = '/data/VOC/VOCdevkit/VOC2007/'
+    train_image_dir = '/data/tianchi/image_9000'
+    train_txt_dir = '/data/tianchi/txt_9000'
+    val_image_dir = '/data/tianchi/image_1000'
+    val_txt_dir = '/data/tianchi/txt_1000'
     min_size = 600  # image resize
     max_size = 1000 # image resize
     num_workers = 8

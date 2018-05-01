@@ -221,7 +221,12 @@ class FasterRCNN(nn.Module):
         scores = list()
         for img, size in zip(prepared_imgs, sizes):
             img = t.autograd.Variable(at.totensor(img).float()[None], volatile=True)
-            scale = img.shape[3] / size[1]
+            try:
+                scale = img.shape[3] / size[1].float()
+                scale = scale.cuda()
+            except AttributeError:
+                scale = img.shape[3] / float(size[1])
+                scale = t.FloatTensor([scale]).cuda()
             roi_cls_loc, roi_scores, rois, _ = self(img, scale=scale)
             # We are assuming that batch size is 1.
             roi_score = roi_scores.data

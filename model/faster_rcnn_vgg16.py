@@ -78,7 +78,7 @@ class FasterRCNNVGG16(FasterRCNN):
         super(FasterRCNNVGG16, self).__init__(
             extractor,
             rpn,
-            head,
+            head
         )
 
 

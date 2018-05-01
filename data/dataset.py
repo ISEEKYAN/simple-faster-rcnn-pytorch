@@ -1,5 +1,6 @@
 import torch as t
 from .voc_dataset import VOCBboxDataset
+from .tianchi_dataset import TianchiDataset
 from skimage import transform as sktsf
 from torchvision import transforms as tvtsf
 from . import util
@@ -87,10 +88,10 @@ class Transform(object):
         bbox = util.resize_bbox(bbox, (H, W), (o_H, o_W))
 
         # horizontally flip
-        img, params = util.random_flip(
-            img, x_random=True, return_param=True)
-        bbox = util.flip_bbox(
-            bbox, (o_H, o_W), x_flip=params['x_flip'])
+        # img, params = util.random_flip(
+        #     img, x_random=True, return_param=True)
+        # bbox = util.flip_bbox(
+        #     bbox, (o_H, o_W), x_flip=params['x_flip'])
 
         return img, bbox, label, scale
 
@@ -98,7 +99,7 @@ class Transform(object):
 class Dataset:
     def __init__(self, opt):
         self.opt = opt
-        self.db = VOCBboxDataset(opt.voc_data_dir)
+        self.db = TianchiDataset(opt.train_image_dir, opt.train_txt_dir)
         self.tsf = Transform(opt.min_size, opt.max_size)
 
     def __getitem__(self, idx):
@@ -116,7 +117,7 @@ class Dataset:
 class TestDataset:
     def __init__(self, opt, split='test', use_difficult=True):
         self.opt = opt
-        self.db = VOCBboxDataset(opt.voc_data_dir, split=split, use_difficult=use_difficult)
+        self.db = TianchiDataset(opt.val_image_dir, opt.val_txt_dir)
 
     def __getitem__(self, idx):
         ori_img, bbox, label, difficult = self.db.get_example(idx)

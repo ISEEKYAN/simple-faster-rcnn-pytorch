@@ -198,7 +198,7 @@ class FasterRCNNTrainer(nn.Module):
             save_path = 'checkpoints/fasterrcnn_%s' % timestr
             for k_, v_ in kwargs.items():
                 save_path += '_%s' % v_
-
+        print(save_path)
         t.save(save_dict, save_path)
         self.vis.save([self.vis.env])
         return save_path
@@ -250,5 +250,5 @@ def _fast_rcnn_loc_loss(pred_loc, gt_loc, gt_label, sigma):
     in_weight[(gt_label > 0).view(-1, 1).expand_as(in_weight).cuda()] = 1
     loc_loss = _smooth_l1_loss(pred_loc, gt_loc, Variable(in_weight), sigma)
     # Normalize by total number of negtive and positive rois.
-    loc_loss /= (gt_label >= 0).sum()  # ignore gt_label==-1 for rpn_loss
+    loc_loss /= (gt_label >= 0).sum().float()  # ignore gt_label==-1 for rpn_loss
     return loc_loss
