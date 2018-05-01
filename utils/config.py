@@ -26,9 +26,12 @@ class Config:
 
     # param for optimizer
     # 0.0005 in origin paper but 0.0001 in tf-faster-rcnn
-    weight_decay = 0.0005
-    lr_decay = 0.1  # 1e-3 -> 1e-4
+    weight_decay = 0.0010
+    #lr_decay = 0.1  # 1e-3 -> 1e-4
+    lr_decay = 0.3  
+    lr_decay_step = 1000 # every 1000 step lr decay
     lr = 1e-3
+    save_loops = 1000# save every 1000 loops
 
 
     # anchor boxs

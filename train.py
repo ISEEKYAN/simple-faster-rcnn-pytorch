@@ -80,6 +80,11 @@ def train(**kwargs):
             img, bbox, label = Variable(img), Variable(bbox), Variable(label)
             trainer.train_step(img, bbox, label, scale)
 
+            if (ii + 1) % opt.save_loops == 0:
+                meter_data = trainer.get_meter_data()
+                total_los =  meter_data["total_loss"].cpu().tolist()
+                trainer.save_within_epoch(epoch, ii+1, total_los)
+
             if (ii + 1) % opt.plot_every == 0:
                 if os.path.exists(opt.debug_file):
                     ipdb.set_trace()
@@ -112,10 +117,10 @@ def train(**kwargs):
         if eval_result['map'] > best_map:
             best_map = eval_result['map']
             best_path = trainer.save(best_map=best_map)
-        if epoch == 9:
-            trainer.load(best_path)
-            trainer.faster_rcnn.scale_lr(opt.lr_decay)
-            lr_ = lr_ * opt.lr_decay
+        # if epoch == 9:
+        #     trainer.load(best_path)
+        #     trainer.faster_rcnn.scale_lr(opt.lr_decay)
+        #     lr_ = lr_ * opt.lr_decay
 
         trainer.vis.plot('test_map', eval_result['map'])
         log_info = 'lr:{}, map:{},loss:{}'.format(str(lr_),

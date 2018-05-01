@@ -285,6 +285,14 @@ class FasterRCNN(nn.Module):
             self.optimizer = t.optim.SGD(params, momentum=0.9)
         return self.optimizer
 
+    def get_scheduler(self):
+        """
+        return scheduler, must be called after get_optimizer
+        """
+        self.scheduler = t.optim.lr_scheduler.StepLR(
+            self.optimizer, step_size=opt.lr_decay_step, gamma=opt.lr_decay)
+        return self.scheduler
+
     def scale_lr(self, decay=0.1):
         for param_group in self.optimizer.param_groups:
             param_group['lr'] *= decay

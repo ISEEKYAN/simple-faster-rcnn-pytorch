@@ -53,6 +53,7 @@ class FasterRCNNTrainer(nn.Module):
         self.loc_normalize_std = faster_rcnn.loc_normalize_std
 
         self.optimizer = self.faster_rcnn.get_optimizer()
+        self.scheduler = self.faster_rcnn.get_scheduler()
         # visdom wrapper
         self.vis = Visualizer(env=opt.env)
 
@@ -165,12 +166,32 @@ class FasterRCNNTrainer(nn.Module):
         return LossTuple(*losses)
 
     def train_step(self, imgs, bboxes, labels, scale):
+        self.scheduler.step()
         self.optimizer.zero_grad()
         losses = self.forward(imgs, bboxes, labels, scale)
         losses.total_loss.backward()
         self.optimizer.step()
         self.update_meters(losses)
         return losses
+
+    def save_within_epoch(self, epoch, loop, loss):
+        """在epoch中途保存"""
+        save_dict = dict()
+
+        save_dict['model'] = self.faster_rcnn.state_dict()
+        save_dict['config'] = opt._state_dict()
+        save_dict['other_info'] = None
+        save_dict['vis_info'] = self.vis.state_dict()
+
+        save_dict['optimizer'] = self.optimizer.state_dict()
+
+        timestr = time.strftime('%m%d%H%M')
+        save_path = 'checkpoints/fasterrcnn_%s_%d_%d_%f.pth' % (timestr, epoch, loop, loss)
+        print(save_path)
+        t.save(save_dict, save_path)
+        self.vis.save([self.vis.env])
+        return save_path
+
 
     def save(self, save_optimizer=False, save_path=None, **kwargs):
         """serialize models include optimizer and other info
