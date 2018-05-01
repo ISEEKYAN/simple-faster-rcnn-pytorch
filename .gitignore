@@ -5,3 +5,4 @@
 *.pth
 *.so
 model/utils/nms/build/*
+checkpoints

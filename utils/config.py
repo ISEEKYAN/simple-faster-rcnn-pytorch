@@ -18,8 +18,11 @@ class Config:
     test_num_workers = 8
 
     # sigma for l1_smooth_loss
-    rpn_sigma = 3.
-    roi_sigma = 1.
+    # rpn_sigma = 3.
+    # roi_sigma = 1.
+    rpn_sigma = 1.5
+    roi_sigma = .5
+
 
     # param for optimizer
     # 0.0005 in origin paper but 0.0001 in tf-faster-rcnn
@@ -27,6 +30,9 @@ class Config:
     lr_decay = 0.1  # 1e-3 -> 1e-4
     lr = 1e-3
 
+
+    # anchor boxs
+    ratios = [1.44780479,   4.3442481,   8.86579222,  17.65785927, 44.89712161]
 
     # visualization
     env = 'faster-rcnn'  # visdom env
@@ -37,11 +43,11 @@ class Config:
     data = 'voc'
     pretrained_model = 'vgg16'
 
-    # training
+    # training 
     epoch = 14
 
 
-    use_adam = False # Use Adam optimizer
+    use_adam =  True# Use Adam optimizer
     use_chainer = False # try match everything as chainer
     use_drop = False # use dropout in RoIHead
     # debug
