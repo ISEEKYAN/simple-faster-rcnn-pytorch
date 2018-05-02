@@ -92,6 +92,14 @@ def train(**kwargs):
                 meter_data = trainer.get_meter_data()
                 for meter in meter_data:
                     meter_data[meter] = meter_data[meter].cpu().tolist()
+            
+                total_los =  meter_data["total_loss"]
+                import math
+                if math.isnan(total_los):
+                    print("loss is nan at epoch={},iter={}".format(epoch,ii+1))
+                    import sys
+                    sys.exit(-1)
+                    
                 trainer.vis.plot_many(meter_data)
                 # plot groud truth bboxes
                 ori_img_ = inverse_normalize(at.tonumpy(img[0]))

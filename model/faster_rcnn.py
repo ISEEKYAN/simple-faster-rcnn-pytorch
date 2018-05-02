@@ -280,7 +280,7 @@ class FasterRCNN(nn.Module):
                     params += [{'params': [value], 'lr': lr, 'weight_decay': opt.weight_decay}]
         if opt.use_adam:
             self.optimizer = t.optim.Adadelta(params)
-            # self.optimizer = t.optim.Adam(params)
+#             self.optimizer = t.optim.Adam(params)
         else:
             self.optimizer = t.optim.SGD(params, momentum=0.9)
         return self.optimizer

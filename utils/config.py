@@ -20,8 +20,8 @@ class Config:
     # sigma for l1_smooth_loss
     # rpn_sigma = 3.
     # roi_sigma = 1.
-    rpn_sigma = 1.5
-    roi_sigma = .5
+    rpn_sigma = 1
+    roi_sigma = .3
 
 
     # param for optimizer
@@ -29,8 +29,8 @@ class Config:
     weight_decay = 0.0010
     #lr_decay = 0.1  # 1e-3 -> 1e-4
     lr_decay = 0.3  
-    lr_decay_step = 1000 # every 1000 step lr decay
-    lr = 1e-3
+    lr_decay_step = 500 # every 1000 step lr decay
+    lr = 1e-4
     save_loops = 1000# save every 1000 loops
 
 
